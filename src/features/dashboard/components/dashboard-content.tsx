@@ -28,11 +28,6 @@ const PerformanceSection = dynamic(
   { loading: () => <Skeleton className="h-96 rounded-[var(--radius-card)]" />, ssr: false }
 );
 
-const RadarSection = dynamic(
-  () => import("@/features/dashboard/components/radar-section").then((m) => m.RadarSection),
-  { loading: () => <Skeleton className="h-96 rounded-[var(--radius-card)]" />, ssr: false }
-);
-
 const MonthlyComparisonSection = dynamic(
   () =>
     import("@/features/dashboard/components/monthly-comparison-section").then(
@@ -135,7 +130,6 @@ export function DashboardContent() {
         previous={periodMetrics.previous}
         periodLabel={PERIOD_LABELS[period] ?? "kỳ trước"}
       />
-      <RadarSection current={periodMetrics.current} />
       <InsightSection current={periodMetrics.current} previous={periodMetrics.previous} />
       <WeeklyDataTable data={data.weekly} />
       <DashboardFooter lastSync={data.lastSync} />

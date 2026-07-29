@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ChartContainer } from "@/components/shared/data-containers";
-import { BarChartEngine } from "@/components/charts/bar-chart";
+import { LineChartEngine } from "@/components/charts/line-chart";
 import { SelectField } from "@/components/ui/select-field";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SUPPORTED_KPI_METRICS } from "@/config/kpi";
@@ -62,7 +62,7 @@ export function MonthlyComparisonSection({ monthly }: MonthlyComparisonSectionPr
           description="Cần dữ liệu ít nhất 1 tháng để so sánh."
         />
       ) : (
-        <BarChartEngine
+        <LineChartEngine
           data={chartData}
           xKey="label"
           series={[{ key: metric, label: METRIC_LABELS[metric], color }]}
