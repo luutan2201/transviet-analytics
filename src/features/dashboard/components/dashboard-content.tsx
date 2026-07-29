@@ -33,6 +33,14 @@ const RadarSection = dynamic(
   { loading: () => <Skeleton className="h-96 rounded-[var(--radius-card)]" />, ssr: false }
 );
 
+const MonthlyComparisonSection = dynamic(
+  () =>
+    import("@/features/dashboard/components/monthly-comparison-section").then(
+      (m) => m.MonthlyComparisonSection
+    ),
+  { loading: () => <Skeleton className="h-96 rounded-[var(--radius-card)]" />, ssr: false }
+);
+
 const WeeklyDataTable = dynamic(
   () => import("@/features/dashboard/components/weekly-data-table").then((m) => m.WeeklyDataTable),
   { loading: () => <Skeleton className="h-96 rounded-[var(--radius-card)]" />, ssr: false }
@@ -121,6 +129,7 @@ export function DashboardContent() {
         onSelectMetric={setSelectedMetric}
       />
       <PerformanceSection points={periodMetrics.points} />
+      <MonthlyComparisonSection monthly={data.monthly} />
       <ComparisonSection
         current={periodMetrics.current}
         previous={periodMetrics.previous}
@@ -128,7 +137,7 @@ export function DashboardContent() {
       />
       <RadarSection current={periodMetrics.current} />
       <InsightSection current={periodMetrics.current} previous={periodMetrics.previous} />
-      <WeeklyDataTable data={periodMetrics.points} />
+      <WeeklyDataTable data={data.weekly} />
       <DashboardFooter lastSync={data.lastSync} />
 
       <MetricDetailDrawer

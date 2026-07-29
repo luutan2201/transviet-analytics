@@ -31,7 +31,7 @@ function validateHeaders(headers, requiredColumns) {
  */
 function isValidWeeklyRow(row) {
   if (!row["Tuần"] || toSafeString(row["Tuần"]) === "") return false;
-  if (!parseWeekRangeMonth(row["Khoảng thời gian"])) return false;
+  if (!resolveWeekMonth(row["Khoảng thời gian"], CONFIG.DEFAULT_SHEET_YEAR)) return false;
   return true;
 }
 

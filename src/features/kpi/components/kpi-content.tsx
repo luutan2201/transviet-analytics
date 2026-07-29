@@ -12,6 +12,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/shared/error-state";
 import { KpiOverviewCard } from "@/features/kpi/components/kpi-overview-card";
 import { KpiTable } from "@/features/kpi/components/kpi-table";
+import { SetKpiTargetDialog } from "@/features/kpi/components/set-kpi-target-dialog";
+import { KpiTargetsList } from "@/features/kpi/components/kpi-targets-list";
 import type { KpiModel } from "@/features/kpi/types/kpi.model";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import { KPI_STATUS_LABELS } from "@/features/kpi/config/kpi-status-labels";
@@ -73,16 +75,19 @@ export function KpiContent() {
         title="KPI"
         subtitle="Theo dõi tiến độ so với mục tiêu kinh doanh"
         actions={
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-2"
-            disabled={isLoading}
-            onClick={() => kpiModels && exportKpiToExcel(kpiModels)}
-          >
-            <Download className="size-4" />
-            Export Excel
-          </Button>
+          <div className="flex items-center gap-2">
+            <SetKpiTargetDialog />
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              disabled={isLoading}
+              onClick={() => kpiModels && exportKpiToExcel(kpiModels)}
+            >
+              <Download className="size-4" />
+              Export Excel
+            </Button>
+          </div>
         }
       />
 
@@ -99,6 +104,8 @@ export function KpiContent() {
               <KpiOverviewCard key={kpi.metric} kpi={kpi} onClick={() => setSelectedKpi(kpi)} />
             ))}
           </div>
+
+          <KpiTargetsList />
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">

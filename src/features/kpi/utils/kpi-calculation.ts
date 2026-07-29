@@ -20,3 +20,8 @@ export function calculateStatus(completion: number): KpiStatus {
   const match = entries.find(([, range]) => completion >= range.min && completion <= range.max);
   return match ? match[0] : "critical";
 }
+
+/** Derives calendar quarter (1-4) from a month number (1-12). */
+export function monthToQuarter(month: number): number {
+  return Math.ceil(month / 3);
+}

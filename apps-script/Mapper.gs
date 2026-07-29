@@ -33,7 +33,7 @@ function sheetValuesToObjects(values) {
  * Comments | Shares | Clicks (Link) | Video Views
  */
 function mapWeeklyRow(row) {
-  var month = parseWeekRangeMonth(row["Khoảng thời gian"]) || 1;
+  var month = resolveWeekMonth(row["Khoảng thời gian"], CONFIG.DEFAULT_SHEET_YEAR) || 1;
   return {
     week: toSafeString(row["Tuần"]),
     month: month,

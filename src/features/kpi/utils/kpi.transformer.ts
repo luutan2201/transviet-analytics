@@ -24,23 +24,42 @@ const METRIC_LOOKUP: ReadonlyMap<string, KpiMetric> = new Map(
   ])
 );
 
+export interface PeriodContext {
+  readonly periodType: "week" | "month" | "quarter" | "year";
+  readonly year: number;
+  readonly month: number | null;
+  readonly quarter: number | null;
+}
+
 function findTargetForMetric(
   metric: KpiMetric,
-  targets: readonly KpiTargetRaw[]
+  targets: readonly KpiTargetRaw[],
+  period: PeriodContext
 ): KpiTargetRaw | undefined {
-  return targets.find((t) => METRIC_LOOKUP.get(normalize(t.metric)) === metric && t.enabled);
+  return targets.find((t) => {
+    if (METRIC_LOOKUP.get(normalize(t.metric)) !== metric || !t.enabled) return false;
+    if (t.year !== period.year) return false;
+
+    // A target configured for a specific month/quarter only applies when the
+    // dashboard is viewing that exact period — otherwise it would silently
+    // leak into unrelated months (e.g. an August target showing up in July).
+    if (t.periodType === "month") return t.month === period.month;
+    if (t.periodType === "quarter") return t.quarter === period.quarter;
+    return true; // year-level target applies to any period within that year
+  });
 }
 
 export function transformKpiData(
   current: MetricSet,
   previous: MetricSet,
-  targets: readonly KpiTargetRaw[]
+  targets: readonly KpiTargetRaw[],
+  period: PeriodContext
 ): KpiModel[] {
   return SUPPORTED_KPI_METRICS.map((metric) => {
     const currentValue = current[metric];
     const previousValue = previous[metric];
     const growth = calculateGrowth(currentValue, previousValue);
-    const targetConfig = findTargetForMetric(metric, targets);
+    const targetConfig = findTargetForMetric(metric, targets, period);
 
     if (!targetConfig || targetConfig.target === 0) {
       return {
