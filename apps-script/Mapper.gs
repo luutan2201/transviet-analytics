@@ -1,0 +1,64 @@
+/**
+ * Mapper.gs
+ * Converts raw 2D sheet values into an array of row objects keyed by header name.
+ * The frontend never depends on spreadsheet column names — this is the only
+ * place that translates between the two.
+ */
+
+/** Collapses multi-line header cells (e.g. "Clicks\n(Link)") into a single normalized string. */
+function normalizeHeader(header) {
+  return toSafeString(header).replace(/\s+/g, " ").trim();
+}
+
+function sheetValuesToObjects(values) {
+  if (values.length === 0) return [];
+
+  var headers = values[0].map(normalizeHeader);
+
+  var rows = [];
+  for (var i = 1; i < values.length; i++) {
+    var row = {};
+    for (var col = 0; col < headers.length; col++) {
+      row[headers[col]] = values[i][col];
+    }
+    rows.push(row);
+  }
+  return rows;
+}
+
+/**
+ * Maps a raw "Weekly Data" row object (by header name) into the API's weekly
+ * metric shape. Customized for the user's real column names:
+ * Tuần | Khoảng thời gian | Reach | Impressions | Followers | Reactions |
+ * Comments | Shares | Clicks (Link) | Video Views
+ */
+function mapWeeklyRow(row) {
+  var month = parseWeekRangeMonth(row["Khoảng thời gian"]) || 1;
+  return {
+    week: toSafeString(row["Tuần"]),
+    month: month,
+    quarter: monthToQuarter(month),
+    year: CONFIG.DEFAULT_SHEET_YEAR,
+    reach: toSafeNumber(row["Reach"]),
+    impressions: toSafeNumber(row["Impressions"]),
+    followers: toSafeNumber(row["Followers"]),
+    reactions: toSafeNumber(row["Reactions"]),
+    comments: toSafeNumber(row["Comments"]),
+    shares: toSafeNumber(row["Shares"]),
+    clicks: toSafeNumber(row["Clicks (Link)"]),
+    videoViews: toSafeNumber(row["Video Views"]),
+  };
+}
+
+/** Maps a raw KPI sheet row into the API's KPI target shape. */
+function mapKpiRow(row) {
+  return {
+    metric: toSafeString(row.Metric),
+    target: toSafeNumber(row.Target),
+    periodType: toSafeString(row.PeriodType),
+    month: row.Month ? toSafeNumber(row.Month) : null,
+    quarter: row.Quarter ? toSafeNumber(row.Quarter) : null,
+    year: toSafeNumber(row.Year),
+    enabled: toSafeString(row.Enabled).toLowerCase() !== "false",
+  };
+}
