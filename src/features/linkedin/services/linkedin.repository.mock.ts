@@ -34,7 +34,8 @@ function buildMonthlyMockData(year: number): WeeklyMetricRaw[] {
     const noise = 0.85 + random() * 0.3;
     const reach = Math.round(6000 * seasonalBoost * noise);
 
-    cumulativeFollowers += Math.round(80 + random() * 150);
+    const newFollowersThisMonth = Math.round(80 + random() * 150);
+    cumulativeFollowers += newFollowersThisMonth;
 
     rows.push({
       week: `M${String(month).padStart(2, "0")}`,
@@ -44,6 +45,7 @@ function buildMonthlyMockData(year: number): WeeklyMetricRaw[] {
       reach,
       impressions: Math.round(reach * (2.5 + random() * 0.6)),
       followers: cumulativeFollowers,
+      newFollowers: newFollowersThisMonth,
       reactions: Math.round(reach * (0.04 + random() * 0.02)),
       comments: Math.round(reach * (0.004 + random() * 0.003)),
       shares: Math.round(reach * (0.006 + random() * 0.004)),

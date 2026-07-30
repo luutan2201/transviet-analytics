@@ -19,6 +19,7 @@ import type { KpiMetric } from "@/config/kpi";
 const LINKEDIN_METRICS: readonly KpiMetric[] = [
   "impressions",
   "followers",
+  "newFollowers",
   "reactions",
   "comments",
   "shares",

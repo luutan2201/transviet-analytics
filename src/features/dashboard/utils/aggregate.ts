@@ -4,6 +4,7 @@ import { EMPTY_METRIC_SET } from "@/features/dashboard/types/dashboard.model";
 const SUMMED_KEYS = [
   "reach",
   "impressions",
+  "newFollowers",
   "reactions",
   "comments",
   "shares",

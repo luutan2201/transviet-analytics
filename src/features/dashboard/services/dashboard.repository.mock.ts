@@ -59,6 +59,7 @@ function buildWeeklyMockData(year: number): WeeklyMetricRaw[] {
         reach,
         impressions,
         followers: cumulativeFollowers,
+        newFollowers: 0,
         reactions,
         comments,
         shares,

@@ -1,4 +1,4 @@
-import { SUPPORTED_KPI_METRICS, type KpiMetric } from "@/config/kpi";
+import { SUPPORTED_KPI_METRICS, FACEBOOK_METRICS, type KpiMetric } from "@/config/kpi";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import type { MetricSet } from "@/features/dashboard/types/dashboard.model";
 import type { KpiTargetRaw } from "@/features/kpi/types/kpi-api.schema";
@@ -53,9 +53,10 @@ export function transformKpiData(
   current: MetricSet,
   previous: MetricSet,
   targets: readonly KpiTargetRaw[],
-  period: PeriodContext
+  period: PeriodContext,
+  metrics: readonly KpiMetric[] = FACEBOOK_METRICS
 ): KpiModel[] {
-  return SUPPORTED_KPI_METRICS.map((metric) => {
+  return metrics.map((metric) => {
     const currentValue = current[metric];
     const previousValue = previous[metric];
     const growth = calculateGrowth(currentValue, previousValue);

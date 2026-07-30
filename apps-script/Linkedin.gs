@@ -2,12 +2,9 @@
  * Linkedin.gs
  * Handles the ?action=linkedin endpoint. Reads the "LinkedIn Monthly" tab —
  * one row per month, no weekly breakdown. Real sheet columns:
- * Tháng | Impressions | New Followers | Reactions | Comments | Reposts | Page Views
- * (row 1 = title, row 2 = headers, a TOTAL/summary row sits at the bottom).
- *
- * "New Followers" is a monthly delta — this function converts it into a
- * running cumulative total (assigned to the `followers` field) so the rest
- * of the app can treat LinkedIn followers the same way as Facebook's.
+ * Tháng | Impressions | New Followers | Followers | Reactions | Comments |
+ * Reposts | Page Views (row 1 = title, row 2 = headers, a TOTAL/summary
+ * row sits at the bottom — both are skipped automatically).
  */
 
 function getLinkedInData(year, forceBypassCache) {
@@ -27,6 +24,7 @@ function getLinkedInData(year, forceBypassCache) {
       reach: 0,
       impressions: 0,
       followers: 0,
+      newFollowers: 0,
       reactions: 0,
       comments: 0,
       shares: 0,
@@ -65,7 +63,7 @@ function getLinkedInData(year, forceBypassCache) {
   validateHeaders(headers, LINKEDIN_MONTHLY_COLUMNS);
 
   var rawRows = sheetValuesToObjects(values);
-  var mappedRows = [];
+  var monthly = [];
   var skipped = 0;
 
   for (var i = 0; i < rawRows.length; i++) {
@@ -73,47 +71,26 @@ function getLinkedInData(year, forceBypassCache) {
       skipped++;
       continue;
     }
-    mappedRows.push(mapLinkedInRow(rawRows[i]));
+    var mapped = mapLinkedInRow(rawRows[i]);
+    mapped.year = CONFIG.DEFAULT_SHEET_YEAR;
+    if (Number(year) === Number(CONFIG.DEFAULT_SHEET_YEAR)) {
+      monthly.push(mapped);
+    }
   }
 
   if (skipped > 0) {
     logInfo("Skipped " + skipped + " row(s) in LinkedIn Monthly (future/unfilled or summary row).");
   }
 
-  // Sort by month ascending, then build the running cumulative follower total.
-  mappedRows.sort(function (a, b) {
+  monthly.sort(function (a, b) {
     return a.month - b.month;
   });
-
-  var monthly = [];
-  var cumulativeFollowers = 0;
-
-  for (var j = 0; j < mappedRows.length; j++) {
-    var row = mappedRows[j];
-    cumulativeFollowers += row.newFollowers;
-
-    if (Number(year) !== Number(CONFIG.DEFAULT_SHEET_YEAR)) continue; // single-year sheet
-
-    monthly.push({
-      week: "M" + (row.month < 10 ? "0" + row.month : "" + row.month),
-      month: row.month,
-      quarter: row.quarter,
-      year: CONFIG.DEFAULT_SHEET_YEAR,
-      reach: 0,
-      impressions: row.impressions,
-      followers: cumulativeFollowers,
-      reactions: row.reactions,
-      comments: row.comments,
-      shares: row.shares,
-      clicks: row.clicks,
-      videoViews: 0,
-    });
-  }
 
   var summary = monthly.reduce(
     function (acc, row) {
       acc.impressions += row.impressions;
       acc.followers = row.followers; // cumulative — last value wins
+      acc.newFollowers += row.newFollowers;
       acc.reactions += row.reactions;
       acc.comments += row.comments;
       acc.shares += row.shares;
@@ -124,6 +101,7 @@ function getLinkedInData(year, forceBypassCache) {
       reach: 0,
       impressions: 0,
       followers: 0,
+      newFollowers: 0,
       reactions: 0,
       comments: 0,
       shares: 0,

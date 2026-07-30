@@ -64,24 +64,26 @@ function mapKpiRow(row) {
 }
 
 /**
- * Maps a raw "LinkedIn Monthly" row (by header name) into an intermediate
- * shape. `newFollowers` is the MONTHLY DELTA as entered in the sheet — NOT
- * cumulative. Linkedin.gs converts this into a running cumulative total
- * before returning data, since the rest of the app (aggregation, KPI status,
- * growth calc) treats "followers" as a cumulative snapshot, consistent with
- * how Facebook's Followers column works.
+ * Maps a raw "LinkedIn Monthly" row (by header name) into the API's monthly
+ * metric shape. The sheet provides BOTH "New Followers" (monthly delta) and
+ * "Followers" (real cumulative total, as tracked by the user) directly —
+ * no computation needed on our end.
  */
 function mapLinkedInRow(row) {
   var month = parseLinkedInMonth(row["Tháng"]);
   return {
+    week: "M" + (month < 10 ? "0" + month : "" + month),
     month: month,
     quarter: monthToQuarter(month),
+    reach: 0,
     impressions: toSafeNumber(row["Impressions"]),
+    followers: toSafeNumber(row["Followers"]),
     newFollowers: toSafeNumber(row["New Followers"]),
     reactions: toSafeNumber(row["Reactions"]),
     comments: toSafeNumber(row["Comments"]),
     shares: toSafeNumber(row["Reposts"]), // LinkedIn's "Reposts" = our generic "shares"
     clicks: toSafeNumber(row["Page Views"]), // LinkedIn's "Page Views" = our generic "clicks"
+    videoViews: 0,
   };
 }
 

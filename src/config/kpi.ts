@@ -17,6 +17,7 @@ export const SUPPORTED_KPI_METRICS = [
   "reach",
   "impressions",
   "followers",
+  "newFollowers",
   "reactions",
   "comments",
   "shares",
@@ -24,3 +25,15 @@ export const SUPPORTED_KPI_METRICS = [
   "videoViews",
 ] as const;
 export type KpiMetric = (typeof SUPPORTED_KPI_METRICS)[number];
+
+/** The original 8 metrics Facebook pages track — excludes newFollowers (LinkedIn-only). */
+export const FACEBOOK_METRICS: readonly KpiMetric[] = [
+  "reach",
+  "impressions",
+  "followers",
+  "reactions",
+  "comments",
+  "shares",
+  "clicks",
+  "videoViews",
+];

@@ -4,6 +4,8 @@ export interface MetricSet {
   readonly reach: number;
   readonly impressions: number;
   readonly followers: number;
+  /** Monthly new-follower delta (LinkedIn only) — 0 for platforms that don't track it separately. */
+  readonly newFollowers: number;
   readonly reactions: number;
   readonly comments: number;
   readonly shares: number;
@@ -15,6 +17,7 @@ export const EMPTY_METRIC_SET: MetricSet = {
   reach: 0,
   impressions: 0,
   followers: 0,
+  newFollowers: 0,
   reactions: 0,
   comments: 0,
   shares: 0,
@@ -42,6 +45,7 @@ export const METRIC_LABELS: Readonly<Record<KpiMetric, string>> = {
   reach: "Reach",
   impressions: "Impressions",
   followers: "Followers",
+  newFollowers: "Follower mới",
   reactions: "Reactions",
   comments: "Comments",
   shares: "Shares",

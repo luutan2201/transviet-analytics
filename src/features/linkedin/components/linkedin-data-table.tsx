@@ -49,6 +49,10 @@ const columns = [
     header: "Followers",
     cell: (info) => formatFullNumber(info.getValue()),
   }),
+  columnHelper.accessor("newFollowers", {
+    header: "Follower mới",
+    cell: (info) => formatFullNumber(info.getValue()),
+  }),
   columnHelper.accessor("reactions", {
     header: "Reactions",
     cell: (info) => formatFullNumber(info.getValue()),
@@ -95,6 +99,7 @@ export function LinkedInDataTable({ data }: LinkedInDataTableProps) {
           Năm: row.year,
           Impressions: row.impressions,
           Followers: row.followers,
+          "Follower mới": row.newFollowers,
           Reactions: row.reactions,
           Comments: row.comments,
           Shares: row.shares,

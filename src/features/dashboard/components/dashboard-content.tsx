@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { exportElementAsPng } from "@/lib/export/png-export";
 import { useToast } from "@/hooks/use-toast";
 import type { KpiMetric } from "@/config/kpi";
+import { FACEBOOK_METRICS } from "@/config/kpi";
 
 // Recharts/TanStack Table are the heaviest dependencies in the bundle — code-split them
 // out of the initial dashboard chunk per 03_Technical_Architecture.md PERFORMANCE
@@ -122,15 +123,20 @@ export function DashboardContent() {
         previous={periodMetrics.previous}
         points={periodMetrics.points}
         onSelectMetric={setSelectedMetric}
+        metrics={FACEBOOK_METRICS}
       />
       <PerformanceSection points={periodMetrics.points} />
-      <MonthlyComparisonSection monthly={data.monthly} />
+      <MonthlyComparisonSection monthly={data.monthly} metrics={FACEBOOK_METRICS} />
       <ComparisonSection
         current={periodMetrics.current}
         previous={periodMetrics.previous}
         periodLabel={PERIOD_LABELS[period] ?? "kỳ trước"}
       />
-      <InsightSection current={periodMetrics.current} previous={periodMetrics.previous} />
+      <InsightSection
+        current={periodMetrics.current}
+        previous={periodMetrics.previous}
+        metrics={FACEBOOK_METRICS}
+      />
       <WeeklyDataTable data={data.weekly} />
       <DashboardFooter lastSync={data.lastSync} />
 

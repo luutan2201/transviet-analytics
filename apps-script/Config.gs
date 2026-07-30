@@ -71,15 +71,16 @@ const WEEKLY_DATA_COLUMNS = [
 
 /**
  * LinkedIn tab has no weekly breakdown — one row per month. Columns match
- * the user's real sheet: Tháng | Impressions | New Followers | Reactions |
- * Comments | Reposts | Page Views (+ optional Ghi chú, ignored).
- * Note: "New Followers" is a MONTHLY DELTA, not cumulative — Linkedin.gs
- * converts it to a running cumulative total to stay consistent with how
- * "followers" is treated everywhere else in the app.
+ * the user's real sheet: Tháng | Impressions | New Followers | Followers |
+ * Reactions | Comments | Reposts | Page Views (+ optional Ghi chú, ignored).
+ * Both "New Followers" (monthly delta) and "Followers" (real cumulative
+ * total, as tracked by the user) are read directly — no computation needed.
  */
 const LINKEDIN_MONTHLY_COLUMNS = [
   "Tháng",
   "Impressions",
+  "New Followers",
+  "Followers",
   "New Followers",
   "Reactions",
   "Comments",

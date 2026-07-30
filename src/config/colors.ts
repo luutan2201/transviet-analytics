@@ -30,6 +30,7 @@ export const CHART_SERIES_COLORS = {
   reach: BRAND_COLORS.primary,
   impressions: "#3b82f6",
   followers: "#22c55e",
+  newFollowers: "#a855f7",
   reactions: "#ec4899",
   comments: "#f59e0b",
   shares: "#8b5cf6",
