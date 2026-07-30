@@ -3,13 +3,18 @@
 import { Trash2, CalendarClock } from "lucide-react";
 import { GlassCard } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useKpiTargetsStore } from "@/stores/kpi-targets.store";
+import { useKpiTargetsStore, type KpiPlatform } from "@/stores/kpi-targets.store";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import { formatFullNumber } from "@/utils/formatters";
 
-export function KpiTargetsList() {
-  const targets = useKpiTargetsStore((s) => s.targets);
+interface KpiTargetsListProps {
+  readonly platform?: KpiPlatform;
+}
+
+export function KpiTargetsList({ platform = "facebook" }: KpiTargetsListProps) {
+  const allTargets = useKpiTargetsStore((s) => s.targets);
   const removeTarget = useKpiTargetsStore((s) => s.removeTarget);
+  const targets = allTargets.filter((t) => t.platform === platform);
 
   if (targets.length === 0) return null;
 

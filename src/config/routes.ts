@@ -12,6 +12,8 @@ export const ROUTES = {
   export: "/export",
   settings: "/settings",
   linkedin: "/linkedin",
+  linkedinKpi: "/linkedin/kpi",
+  linkedinReport: "/linkedin/report",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

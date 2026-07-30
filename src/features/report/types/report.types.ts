@@ -19,6 +19,7 @@ export interface ReportContext {
   readonly reportType: ReportType;
   readonly periodLabel: string;
   readonly year: number;
+  readonly platformLabel: string;
   readonly metrics: readonly ReportMetricSummary[];
   readonly kpis: readonly ReportKpiSummary[];
   readonly topPositiveInsights: readonly string[];

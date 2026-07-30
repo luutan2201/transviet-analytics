@@ -1,4 +1,4 @@
-import { SUPPORTED_KPI_METRICS } from "@/config/kpi";
+import { FACEBOOK_METRICS, type KpiMetric } from "@/config/kpi";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import type { MetricSet } from "@/features/dashboard/types/dashboard.model";
 import { calculateGrowth } from "@/features/dashboard/utils/growth";
@@ -13,9 +13,11 @@ export function buildReportContext(
   year: number,
   current: MetricSet,
   previous: MetricSet,
-  kpis: readonly KpiModel[]
+  kpis: readonly KpiModel[],
+  platformLabel: string = "Facebook",
+  metrics: readonly KpiMetric[] = FACEBOOK_METRICS
 ): ReportContext {
-  const metrics = SUPPORTED_KPI_METRICS.map((metric) => {
+  const metricSummaries = metrics.map((metric) => {
     const growth = calculateGrowth(current[metric], previous[metric]);
     return {
       metric: METRIC_LABELS[metric],
@@ -32,7 +34,7 @@ export function buildReportContext(
     status: KPI_STATUS_LABELS[kpi.status],
   }));
 
-  const insights = generateInsights(current, previous);
+  const insights = generateInsights(current, previous, metrics);
   const topPositiveInsights = insights
     .filter((i) => i.severity === "positive")
     .map((i) => i.description);
@@ -44,7 +46,8 @@ export function buildReportContext(
     reportType,
     periodLabel,
     year,
-    metrics,
+    platformLabel,
+    metrics: metricSummaries,
     kpis: kpiSummaries,
     topPositiveInsights,
     topNegativeInsights,

@@ -1,6 +1,7 @@
 import { REPORT_LENGTH_RANGE, type ReportContext } from "@/features/report/types/report.types";
 
-const SYSTEM_PROMPT = `Bạn là một Marketing Analyst giàu kinh nghiệm, viết báo cáo hiệu suất Facebook Marketing bằng tiếng Việt.
+const SYSTEM_PROMPT_TEMPLATE = (platformLabel: string) =>
+  `Bạn là một Marketing Analyst giàu kinh nghiệm, viết báo cáo hiệu suất ${platformLabel} Marketing bằng tiếng Việt.
 Giọng văn chuyên nghiệp, dễ hiểu cho ban điều hành. Không dùng ngôn ngữ marketing sáo rỗng, không emoji, không phóng đại.
 Luôn giải thích ý nghĩa của số liệu, không chỉ liệt kê lại.`;
 
@@ -38,7 +39,7 @@ export function buildReportPrompt(context: ReportContext): string {
       ? context.topNegativeInsights.map((i) => `- ${i}`).join("\n")
       : "Không có vấn đề đáng lo ngại.";
 
-  return `${SYSTEM_PROMPT}
+  return `${SYSTEM_PROMPT_TEMPLATE(context.platformLabel)}
 
 # Bối cảnh
 Kỳ báo cáo: ${context.periodLabel} (${context.year})

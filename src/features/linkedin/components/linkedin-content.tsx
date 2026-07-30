@@ -14,17 +14,7 @@ import { DashboardFooter } from "@/features/dashboard/components/dashboard-foote
 import { ErrorState } from "@/components/shared/error-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { KpiMetric } from "@/config/kpi";
-
-/** LinkedIn's sheet has no Reach or Video Views columns — hide those metrics everywhere on this page. */
-const LINKEDIN_METRICS: readonly KpiMetric[] = [
-  "impressions",
-  "followers",
-  "newFollowers",
-  "reactions",
-  "comments",
-  "shares",
-  "clicks",
-];
+import { LINKEDIN_METRICS } from "@/features/linkedin/config/linkedin-metrics";
 
 const MonthlyComparisonSection = dynamic(
   () =>

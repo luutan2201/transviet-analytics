@@ -13,12 +13,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SelectField } from "@/components/ui/select-field";
-import { SUPPORTED_KPI_METRICS, type KpiMetric } from "@/config/kpi";
+import { FACEBOOK_METRICS, type KpiMetric } from "@/config/kpi";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
-import { useKpiTargetsStore } from "@/stores/kpi-targets.store";
+import { useKpiTargetsStore, type KpiPlatform } from "@/stores/kpi-targets.store";
 import { useToast } from "@/hooks/use-toast";
-
-const METRIC_OPTIONS = SUPPORTED_KPI_METRICS.map((m) => ({ value: m, label: METRIC_LABELS[m] }));
 
 const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => ({
   value: String(i + 1),
@@ -34,13 +32,20 @@ function getNextMonth(): { month: number; year: number } {
 
 interface SetKpiTargetDialogProps {
   readonly trigger?: React.ReactNode;
+  readonly platform?: KpiPlatform;
+  readonly metrics?: readonly KpiMetric[];
 }
 
-export function SetKpiTargetDialog({ trigger }: SetKpiTargetDialogProps) {
+export function SetKpiTargetDialog({
+  trigger,
+  platform = "facebook",
+  metrics = FACEBOOK_METRICS,
+}: SetKpiTargetDialogProps) {
   const [open, setOpen] = useState(false);
   const defaultNext = getNextMonth();
+  const metricOptions = metrics.map((m) => ({ value: m, label: METRIC_LABELS[m] }));
 
-  const [metric, setMetric] = useState<KpiMetric>("reach");
+  const [metric, setMetric] = useState<KpiMetric>(metrics[0] ?? "reach");
   const [targetValue, setTargetValue] = useState("");
   const [month, setMonth] = useState(defaultNext.month);
   const [year, setYear] = useState(defaultNext.year);
@@ -61,7 +66,7 @@ export function SetKpiTargetDialog({ trigger }: SetKpiTargetDialogProps) {
       return;
     }
 
-    setTarget(metric, numericTarget, month, year);
+    setTarget(platform, metric, numericTarget, month, year);
     toast({
       title: "Đã đặt KPI",
       description: `${METRIC_LABELS[metric]} · Tháng ${month}/${year} · Mục tiêu ${numericTarget.toLocaleString("vi-VN")}`,
@@ -95,7 +100,7 @@ export function SetKpiTargetDialog({ trigger }: SetKpiTargetDialogProps) {
             <Label htmlFor="kpi-metric">Chỉ số</Label>
             <SelectField
               id="kpi-metric"
-              options={METRIC_OPTIONS}
+              options={metricOptions}
               value={metric}
               onChange={(e) => setMetric(e.target.value as KpiMetric)}
             />

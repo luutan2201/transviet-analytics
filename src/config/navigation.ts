@@ -33,6 +33,8 @@ export const PRIMARY_NAVIGATION: readonly NavigationItem[] = [
 /** Additional connected platforms. */
 export const PLATFORMS_NAVIGATION: readonly NavigationItem[] = [
   { label: "LinkedIn", href: ROUTES.linkedin, icon: Share2 },
+  { label: "LinkedIn KPI", href: ROUTES.linkedinKpi, icon: Target },
+  { label: "LinkedIn Report", href: ROUTES.linkedinReport, icon: FileText },
 ] as const;
 
 /** Future platform modules — rendered disabled until their feature module ships. */
