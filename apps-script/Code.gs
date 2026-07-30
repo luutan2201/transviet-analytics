@@ -21,6 +21,10 @@ function doGet(e) {
         var dashboardData = getDashboardData(year, e.parameter.force === "true");
         return buildSuccessResponse(dashboardData, elapsedMs(startedAt));
       }
+      case "linkedin": {
+        var linkedInData = getLinkedInData(year, e.parameter.force === "true");
+        return buildSuccessResponse(linkedInData, elapsedMs(startedAt));
+      }
       case "kpi": {
         var kpiData = getKpiData(year);
         return buildSuccessResponse(kpiData, elapsedMs(startedAt));

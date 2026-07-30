@@ -62,3 +62,38 @@ function mapKpiRow(row) {
     enabled: toSafeString(row.Enabled).toLowerCase() !== "false",
   };
 }
+
+/**
+ * Maps a raw "LinkedIn Monthly" row (by header name) into an intermediate
+ * shape. `newFollowers` is the MONTHLY DELTA as entered in the sheet — NOT
+ * cumulative. Linkedin.gs converts this into a running cumulative total
+ * before returning data, since the rest of the app (aggregation, KPI status,
+ * growth calc) treats "followers" as a cumulative snapshot, consistent with
+ * how Facebook's Followers column works.
+ */
+function mapLinkedInRow(row) {
+  var month = parseLinkedInMonth(row["Tháng"]);
+  return {
+    month: month,
+    quarter: monthToQuarter(month),
+    impressions: toSafeNumber(row["Impressions"]),
+    newFollowers: toSafeNumber(row["New Followers"]),
+    reactions: toSafeNumber(row["Reactions"]),
+    comments: toSafeNumber(row["Comments"]),
+    shares: toSafeNumber(row["Reposts"]), // LinkedIn's "Reposts" = our generic "shares"
+    clicks: toSafeNumber(row["Page Views"]), // LinkedIn's "Page Views" = our generic "clicks"
+  };
+}
+
+/**
+ * Returns true if a raw LinkedIn row represents an actually-reported month:
+ * the month must be parseable AND Impressions must not be blank. This skips
+ * both the TOTAL/summary row and not-yet-reported future months (which have
+ * a month label but empty metric cells).
+ */
+function isValidLinkedInRow(row) {
+  if (!parseLinkedInMonth(row["Tháng"])) return false;
+  var impressions = row["Impressions"];
+  if (impressions === "" || impressions === null || impressions === undefined) return false;
+  return true;
+}

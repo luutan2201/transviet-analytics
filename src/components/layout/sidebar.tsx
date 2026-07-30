@@ -5,7 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { ChevronsLeft, ChevronsRight, BarChart3 } from "lucide-react";
-import { PRIMARY_NAVIGATION, FUTURE_NAVIGATION, SETTINGS_NAVIGATION } from "@/config/navigation";
+import {
+  PRIMARY_NAVIGATION,
+  PLATFORMS_NAVIGATION,
+  FUTURE_NAVIGATION,
+  SETTINGS_NAVIGATION,
+} from "@/config/navigation";
 import { SIDEBAR_CONFIG } from "@/config/sidebar";
 import { useSidebarStore } from "@/stores/sidebar.store";
 import { cn } from "@/lib/utils";
@@ -90,6 +95,20 @@ export function Sidebar() {
 
       <nav className="flex flex-1 flex-col gap-1">
         {PRIMARY_NAVIGATION.map((item) => (
+          <NavLink
+            key={item.href}
+            {...item}
+            collapsed={isCollapsed}
+            active={pathname === item.href}
+          />
+        ))}
+
+        {!isCollapsed && (
+          <p className="mb-1 mt-4 px-3 text-[10px] font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+            Platforms
+          </p>
+        )}
+        {PLATFORMS_NAVIGATION.map((item) => (
           <NavLink
             key={item.href}
             {...item}

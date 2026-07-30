@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select-field";
 import { useFilterStore, type FilterPeriod } from "@/stores/filter.store";
 
-const PERIOD_OPTIONS: readonly { value: FilterPeriod; label: string }[] = [
+const ALL_PERIOD_OPTIONS: readonly { value: FilterPeriod; label: string }[] = [
   { value: "week", label: "Tuần" },
   { value: "month", label: "Tháng" },
   { value: "quarter", label: "Quý" },
@@ -28,9 +28,18 @@ function buildYearOptions(currentYear: number) {
   }));
 }
 
-export function FilterBar() {
+interface FilterBarProps {
+  /** Restricts which period tabs are shown — defaults to all 4. LinkedIn only supports month/quarter/year. */
+  readonly periods?: readonly FilterPeriod[];
+}
+
+export function FilterBar({ periods }: FilterBarProps = {}) {
   const { period, year, month, quarter, setPeriod, setYear, setMonth, setQuarter, reset } =
     useFilterStore();
+
+  const periodOptions = periods
+    ? ALL_PERIOD_OPTIONS.filter((o) => periods.includes(o.value))
+    : ALL_PERIOD_OPTIONS;
 
   const now = new Date();
   const yearOptions = buildYearOptions(now.getFullYear());
@@ -43,7 +52,7 @@ export function FilterBar() {
     >
       <GlassCard className="flex flex-wrap items-center gap-3 p-4">
         <div className="flex gap-1 rounded-[var(--radius-button)] bg-[var(--muted)] p-1">
-          {PERIOD_OPTIONS.map((option) => (
+          {periodOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => setPeriod(option.value)}

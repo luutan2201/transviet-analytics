@@ -7,11 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { generateInsights } from "@/features/insights/utils/insight-engine";
 import type { MetricSet } from "@/features/dashboard/types/dashboard.model";
+import type { KpiMetric } from "@/config/kpi";
 import type { InsightSeverity } from "@/features/insights/types/insight.types";
 
 interface InsightSectionProps {
   readonly current: MetricSet;
   readonly previous: MetricSet;
+  readonly metrics?: readonly KpiMetric[];
 }
 
 const SEVERITY_BADGE: Record<InsightSeverity, "success" | "danger" | "warning" | "neutral"> = {
@@ -21,8 +23,10 @@ const SEVERITY_BADGE: Record<InsightSeverity, "success" | "danger" | "warning" |
   neutral: "neutral",
 };
 
-export function InsightSection({ current, previous }: InsightSectionProps) {
-  const insights = generateInsights(current, previous);
+export function InsightSection({ current, previous, metrics }: InsightSectionProps) {
+  const insights = metrics
+    ? generateInsights(current, previous, metrics)
+    : generateInsights(current, previous);
 
   return (
     <div>

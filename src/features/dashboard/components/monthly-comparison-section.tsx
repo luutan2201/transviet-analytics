@@ -5,7 +5,7 @@ import { ChartContainer } from "@/components/shared/data-containers";
 import { LineChartEngine } from "@/components/charts/line-chart";
 import { SelectField } from "@/components/ui/select-field";
 import { EmptyState } from "@/components/shared/empty-state";
-import { SUPPORTED_KPI_METRICS } from "@/config/kpi";
+import { SUPPORTED_KPI_METRICS, type KpiMetric } from "@/config/kpi";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import type { WeeklyMetricPoint } from "@/features/dashboard/types/dashboard.model";
 import { CHART_SERIES_COLORS } from "@/config/colors";
@@ -13,9 +13,9 @@ import { BarChart3 } from "lucide-react";
 
 interface MonthlyComparisonSectionProps {
   readonly monthly: readonly WeeklyMetricPoint[];
+  /** Restricts which metrics are selectable — defaults to all 8. */
+  readonly metrics?: readonly KpiMetric[];
 }
-
-const METRIC_OPTIONS = SUPPORTED_KPI_METRICS.map((m) => ({ value: m, label: METRIC_LABELS[m] }));
 
 const MONTH_NAMES = [
   "Th1",
@@ -32,8 +32,10 @@ const MONTH_NAMES = [
   "Th12",
 ];
 
-export function MonthlyComparisonSection({ monthly }: MonthlyComparisonSectionProps) {
-  const [metric, setMetric] = useState<(typeof SUPPORTED_KPI_METRICS)[number]>("reach");
+export function MonthlyComparisonSection({ monthly, metrics }: MonthlyComparisonSectionProps) {
+  const availableMetrics = metrics ?? SUPPORTED_KPI_METRICS;
+  const metricOptions = availableMetrics.map((m) => ({ value: m, label: METRIC_LABELS[m] }));
+  const [metric, setMetric] = useState<KpiMetric>(availableMetrics[0] ?? "reach");
   const color = CHART_SERIES_COLORS[metric];
 
   const sorted = [...monthly].sort((a, b) => a.month - b.month);
@@ -49,9 +51,9 @@ export function MonthlyComparisonSection({ monthly }: MonthlyComparisonSectionPr
       actions={
         <SelectField
           className="w-40"
-          options={METRIC_OPTIONS}
+          options={metricOptions}
           value={metric}
-          onChange={(e) => setMetric(e.target.value as (typeof SUPPORTED_KPI_METRICS)[number])}
+          onChange={(e) => setMetric(e.target.value as KpiMetric)}
         />
       }
     >

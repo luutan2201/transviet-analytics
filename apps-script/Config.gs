@@ -17,6 +17,7 @@ const CONFIG = {
     WEEKLY_DATA: "📅 Weekly Data",
     KPI: "KPI",
     SETTINGS: "Settings",
+    LINKEDIN_MONTHLY: "LinkedIn Monthly",
   },
 
   // The "Weekly Data" tab has no Year column — it's a single-year sheet.
@@ -25,9 +26,13 @@ const CONFIG = {
   DEFAULT_SHEET_YEAR: 2026,
 
   // Row number (1-indexed) where the actual column headers live.
-  // The user's sheet has a title row ("📘 FACEBOOK WEEKLY REPORT") in row 1,
-  // so the real headers are on row 2.
+  // The user's Facebook sheet has a title row ("📘 FACEBOOK WEEKLY REPORT")
+  // in row 1, so the real headers are on row 2.
   WEEKLY_DATA_HEADER_ROW: 2,
+
+  // Row 1 of the LinkedIn tab is a title ("LINKEDIN MONTHLY REPORT"),
+  // headers are on row 2.
+  LINKEDIN_HEADER_ROW: 2,
 
   API_VERSION: "1.0.0",
 
@@ -62,4 +67,22 @@ const WEEKLY_DATA_COLUMNS = [
   "Shares",
   "Clicks (Link)",
   "Video Views",
+];
+
+/**
+ * LinkedIn tab has no weekly breakdown — one row per month. Columns match
+ * the user's real sheet: Tháng | Impressions | New Followers | Reactions |
+ * Comments | Reposts | Page Views (+ optional Ghi chú, ignored).
+ * Note: "New Followers" is a MONTHLY DELTA, not cumulative — Linkedin.gs
+ * converts it to a running cumulative total to stay consistent with how
+ * "followers" is treated everywhere else in the app.
+ */
+const LINKEDIN_MONTHLY_COLUMNS = [
+  "Tháng",
+  "Impressions",
+  "New Followers",
+  "Reactions",
+  "Comments",
+  "Reposts",
+  "Page Views",
 ];

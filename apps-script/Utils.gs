@@ -44,6 +44,19 @@ function monthToQuarter(month) {
 }
 
 /**
+ * Parses LinkedIn's "Tháng" column text (e.g. "Tháng 1 (Jan)", "Tháng 12 (Dec)")
+ * and returns the month number (1-12). Returns null if unparseable — this is
+ * also how the TOTAL/summary row at the bottom of the sheet gets skipped,
+ * since it doesn't match this pattern.
+ */
+function parseLinkedInMonth(monthStr) {
+  var match = String(monthStr).match(/Tháng\s*(\d{1,2})/);
+  if (!match) return null;
+  var month = parseInt(match[1], 10);
+  return month >= 1 && month <= 12 ? month : null;
+}
+
+/**
  * Parses a week's date range string (e.g. "01/01 - 04/01", "29/06 - 05/07") and
  * returns which month (1-12) the MAJORITY of days in that range belong to.
  * If the range spans two months, whichever month has more days within the

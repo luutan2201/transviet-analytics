@@ -35,7 +35,7 @@ export interface DashboardModel {
   readonly quarterly: readonly WeeklyMetricPoint[];
   readonly yearly: readonly WeeklyMetricPoint[];
   readonly lastSync: string;
-  readonly platform: "facebook";
+  readonly platform: "facebook" | "linkedin";
 }
 
 export const METRIC_LABELS: Readonly<Record<KpiMetric, string>> = {

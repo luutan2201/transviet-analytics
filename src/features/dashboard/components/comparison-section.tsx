@@ -7,18 +7,27 @@ import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import { METRIC_ICONS } from "@/features/dashboard/config/metric-icons";
 import { calculateMetricSetGrowth } from "@/features/dashboard/utils/growth";
 import type { MetricSet } from "@/features/dashboard/types/dashboard.model";
+import type { KpiMetric } from "@/config/kpi";
 import { formatCompactNumber, formatSignedPercent } from "@/utils/formatters";
 
 interface ComparisonSectionProps {
   readonly current: MetricSet;
   readonly previous: MetricSet;
   readonly periodLabel: string;
+  /** Overrides which 4 metrics highlight — defaults to reach/impressions/followers/reactions. */
+  readonly metrics?: readonly KpiMetric[];
 }
 
-const HIGHLIGHTED_METRICS = ["reach", "impressions", "followers", "reactions"] as const;
+const DEFAULT_HIGHLIGHTED_METRICS = ["reach", "impressions", "followers", "reactions"] as const;
 
-export function ComparisonSection({ current, previous, periodLabel }: ComparisonSectionProps) {
+export function ComparisonSection({
+  current,
+  previous,
+  periodLabel,
+  metrics,
+}: ComparisonSectionProps) {
   const growth = calculateMetricSetGrowth(current, previous);
+  const highlighted = metrics ?? DEFAULT_HIGHLIGHTED_METRICS;
 
   return (
     <div>
@@ -26,7 +35,7 @@ export function ComparisonSection({ current, previous, periodLabel }: Comparison
         <h3 className="text-base font-semibold text-[var(--foreground)]">So sánh {periodLabel}</h3>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {HIGHLIGHTED_METRICS.map((metric, index) => {
+        {highlighted.map((metric, index) => {
           const g = growth[metric];
           const Icon = METRIC_ICONS[metric];
           const TrendIcon =

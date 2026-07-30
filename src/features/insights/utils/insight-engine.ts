@@ -1,4 +1,4 @@
-import { SUPPORTED_KPI_METRICS } from "@/config/kpi";
+import { SUPPORTED_KPI_METRICS, type KpiMetric } from "@/config/kpi";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import type { MetricSet } from "@/features/dashboard/types/dashboard.model";
 import { calculateMetricSetGrowth } from "@/features/dashboard/utils/growth";
@@ -22,13 +22,19 @@ function growthPriority(absGrowth: number): InsightPriority {
 /**
  * Generates insights from growth data using deterministic rules — no LLM required.
  * Epic 08 (AI Report) may layer AI-expanded narrative on top of these same insights.
+ * `metrics` restricts which metrics are considered (e.g. excludes reach/videoViews
+ * for platforms that don't track them).
  */
-export function generateInsights(current: MetricSet, previous: MetricSet): Insight[] {
+export function generateInsights(
+  current: MetricSet,
+  previous: MetricSet,
+  metrics: readonly KpiMetric[] = SUPPORTED_KPI_METRICS
+): Insight[] {
   const growth = calculateMetricSetGrowth(current, previous);
   const now = new Date().toISOString();
   const insights: Insight[] = [];
 
-  for (const metric of SUPPORTED_KPI_METRICS) {
+  for (const metric of metrics) {
     const g = growth[metric];
     const label = METRIC_LABELS[metric];
     const absGrowth = Math.abs(g.growthPercent);

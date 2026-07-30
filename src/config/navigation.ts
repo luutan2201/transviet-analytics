@@ -30,9 +30,13 @@ export const PRIMARY_NAVIGATION: readonly NavigationItem[] = [
   { label: "Export", href: ROUTES.export, icon: Download },
 ] as const;
 
+/** Additional connected platforms. */
+export const PLATFORMS_NAVIGATION: readonly NavigationItem[] = [
+  { label: "LinkedIn", href: ROUTES.linkedin, icon: Share2 },
+] as const;
+
 /** Future platform modules — rendered disabled until their feature module ships. */
 export const FUTURE_NAVIGATION: readonly NavigationItem[] = [
-  { label: "LinkedIn", href: "#", icon: Share2, disabled: true, badge: "Soon" },
   { label: "Website", href: "#", icon: Globe, disabled: true, badge: "Soon" },
 ] as const;
 

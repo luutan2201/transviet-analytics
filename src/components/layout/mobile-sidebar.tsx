@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BarChart3 } from "lucide-react";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
-import { PRIMARY_NAVIGATION, SETTINGS_NAVIGATION } from "@/config/navigation";
+import { PRIMARY_NAVIGATION, PLATFORMS_NAVIGATION, SETTINGS_NAVIGATION } from "@/config/navigation";
 import { useSidebarStore } from "@/stores/sidebar.store";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ export function MobileSidebar() {
         </div>
 
         <nav className="flex flex-col gap-1">
-          {[...PRIMARY_NAVIGATION, SETTINGS_NAVIGATION].map((item) => (
+          {[...PRIMARY_NAVIGATION, ...PLATFORMS_NAVIGATION, SETTINGS_NAVIGATION].map((item) => (
             <Link
               key={item.href}
               href={item.href}

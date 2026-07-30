@@ -11,8 +11,10 @@ function handleSync(year) {
   var cache = CacheService.getScriptCache();
   cache.remove("dashboard_" + year);
   cache.remove("kpi_" + year);
+  cache.remove("linkedin_" + year);
 
   var data = getDashboardData(year, true);
+  getLinkedInData(year, true);
   var executionTime = new Date().getTime() - startedAt.getTime();
 
   return {
