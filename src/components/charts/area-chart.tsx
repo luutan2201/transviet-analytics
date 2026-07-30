@@ -60,7 +60,7 @@ export function AreaChartEngine({
       )}
       <div style={{ height }}>
         <ResponsiveContainer width="100%" height="100%">
-          <RechartsAreaChart data={[...data]} margin={{ left: -16, right: 8, top: 8, bottom: 0 }}>
+          <RechartsAreaChart data={[...data]} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
             <defs>
               {series.map((s) => (
                 <linearGradient key={s.key} id={`area-fill-${s.key}`} x1="0" y1="0" x2="0" y2="1">
@@ -82,11 +82,12 @@ export function AreaChartEngine({
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+              tick={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 500 }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v: number) => formatCompactNumber(v)}
-              width={48}
+              width={60}
+              allowDecimals={false}
             />
             <Tooltip
               content={({ active, label, payload }) => (

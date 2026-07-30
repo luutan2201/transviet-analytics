@@ -42,7 +42,7 @@ export function BarChartEngine({
         <RechartsBarChart
           data={[...data]}
           layout={horizontal ? "vertical" : "horizontal"}
-          margin={{ left: horizontal ? 24 : -16, right: 8, top: 8, bottom: 0 }}
+          margin={{ left: horizontal ? 24 : 0, right: 8, top: 8, bottom: 0 }}
         >
           <CartesianGrid
             strokeDasharray="3 3"
@@ -55,10 +55,11 @@ export function BarChartEngine({
             <>
               <XAxis
                 type="number"
-                tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                tick={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 500 }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(v: number) => formatCompactNumber(v)}
+                allowDecimals={false}
               />
               <YAxis
                 type="category"
@@ -78,11 +79,12 @@ export function BarChartEngine({
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                tick={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 500 }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(v: number) => formatCompactNumber(v)}
-                width={48}
+                width={60}
+                allowDecimals={false}
               />
             </>
           )}

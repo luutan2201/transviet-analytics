@@ -30,7 +30,7 @@ export function LineChartEngine({ data, xKey, series, height = 288 }: LineChartE
   return (
     <div style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsLineChart data={[...data]} margin={{ left: -16, right: 8, top: 8, bottom: 0 }}>
+        <RechartsLineChart data={[...data]} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
           <CartesianGrid
             strokeDasharray="3 3"
             vertical={false}
@@ -44,11 +44,12 @@ export function LineChartEngine({ data, xKey, series, height = 288 }: LineChartE
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+            tick={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v: number) => formatCompactNumber(v)}
-            width={48}
+            width={60}
+            allowDecimals={false}
           />
           <Tooltip
             content={({ active, label, payload }) => (
