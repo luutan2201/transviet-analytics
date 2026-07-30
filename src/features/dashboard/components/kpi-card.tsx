@@ -49,32 +49,35 @@ function KpiCardBase({ metric, growth, points, onClick }: KpiCardProps) {
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className="text-left"
     >
-      <GlassCard className="flex h-full flex-col gap-4 p-5 transition-shadow hover:shadow-[var(--shadow-hover)]">
-        <div className="flex items-center justify-between">
+      <GlassCard className="flex h-full flex-col gap-1.5 p-2.5 transition-shadow hover:shadow-[var(--shadow-hover)] sm:gap-4 sm:p-5">
+        <div className="flex items-center justify-between gap-1">
           <div
-            className="flex size-10 items-center justify-center rounded-[var(--radius-md)]"
+            className="flex size-6 shrink-0 items-center justify-center rounded-[var(--radius-sm)] sm:size-10 sm:rounded-[var(--radius-md)]"
             style={{ backgroundColor: `color-mix(in srgb, ${color} 16%, transparent)` }}
           >
-            <Icon className="size-5" style={{ color }} />
+            <Icon className="size-3.5 sm:size-5" style={{ color }} />
           </div>
           <Badge
             variant={
               growth.trend === "up" ? "success" : growth.trend === "down" ? "danger" : "neutral"
             }
+            className="gap-0.5 px-1.5 py-0.5 text-[9px] sm:gap-1.5 sm:px-3 sm:py-1 sm:text-xs"
           >
-            <TrendIcon className="size-3" />
-            {formatSignedPercent(growth.growthPercent)}
+            <TrendIcon className="size-2 sm:size-3" />
+            <span className="truncate">{formatSignedPercent(growth.growthPercent)}</span>
           </Badge>
         </div>
 
         <div>
-          <p className="text-sm text-[var(--muted-foreground)]">{METRIC_LABELS[metric]}</p>
-          <p className="mt-1 text-2xl font-bold tracking-tight text-[var(--foreground)]">
+          <p className="truncate text-[10px] text-[var(--muted-foreground)] sm:text-sm">
+            {METRIC_LABELS[metric]}
+          </p>
+          <p className="mt-0.5 text-sm font-bold tracking-tight text-[var(--foreground)] sm:mt-1 sm:text-2xl">
             {formatCompactNumber(growth.current)}
           </p>
         </div>
 
-        <div className="-mx-1 h-12">
+        <div className="-mx-1 hidden h-12 sm:block">
           <KpiSparkline data={sparklineData} color={color} gradientId={`sparkline-${metric}`} />
         </div>
       </GlassCard>
