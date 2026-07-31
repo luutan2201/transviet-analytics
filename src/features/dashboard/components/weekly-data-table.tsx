@@ -69,7 +69,7 @@ const columns = [
   columnHelper.display({
     id: "engagementRate",
     header: "Engagement Rate",
-    cell: (info) => formatPercent(calculateEngagementRate(info.row.original)),
+    cell: (info) => formatPercent(calculateEngagementRate(info.row.original, "facebook")),
   }),
 ];
 
@@ -123,7 +123,7 @@ export function WeeklyDataTable({ data }: WeeklyDataTableProps) {
           Shares: row.shares,
           Clicks: row.clicks,
           "Video Views": row.videoViews,
-          "Engagement Rate (%)": Number(calculateEngagementRate(row).toFixed(2)),
+          "Engagement Rate (%)": Number(calculateEngagementRate(row, "facebook").toFixed(2)),
         })),
       },
     ]);

@@ -73,7 +73,7 @@ const columns = [
   columnHelper.display({
     id: "engagementRate",
     header: "Engagement Rate",
-    cell: (info) => formatPercent(calculateEngagementRate(info.row.original)),
+    cell: (info) => formatPercent(calculateEngagementRate(info.row.original, "linkedin")),
   }),
 ];
 
@@ -110,7 +110,7 @@ export function LinkedInDataTable({ data }: LinkedInDataTableProps) {
           Comments: row.comments,
           Shares: row.shares,
           Clicks: row.clicks,
-          "Engagement Rate (%)": Number(calculateEngagementRate(row).toFixed(2)),
+          "Engagement Rate (%)": Number(calculateEngagementRate(row, "linkedin").toFixed(2)),
         })),
       },
     ]);

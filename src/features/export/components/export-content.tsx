@@ -88,7 +88,7 @@ export function ExportContent() {
           Shares: row.shares,
           Clicks: row.clicks,
           "Video Views": row.videoViews,
-          "Engagement Rate (%)": Number(calculateEngagementRate(row).toFixed(2)),
+          "Engagement Rate (%)": Number(calculateEngagementRate(row, "facebook").toFixed(2)),
         })),
       },
     ]);

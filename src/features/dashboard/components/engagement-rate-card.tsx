@@ -6,7 +6,10 @@ import { Flame, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { GlassCard } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { calculateEngagementRate } from "@/features/dashboard/utils/engagement";
+import {
+  calculateEngagementRate,
+  type EngagementPlatform,
+} from "@/features/dashboard/utils/engagement";
 import { calculateGrowth } from "@/features/dashboard/utils/growth";
 import { formatPercent, formatSignedPercent } from "@/utils/formatters";
 import type { MetricSet, WeeklyMetricPoint } from "@/features/dashboard/types/dashboard.model";
@@ -24,15 +27,21 @@ interface EngagementRateCardProps {
   readonly current: MetricSet;
   readonly previous: MetricSet;
   readonly points: readonly WeeklyMetricPoint[];
+  readonly platform?: EngagementPlatform;
 }
 
-export function EngagementRateCard({ current, previous, points }: EngagementRateCardProps) {
-  const currentRate = calculateEngagementRate(current);
-  const previousRate = calculateEngagementRate(previous);
+export function EngagementRateCard({
+  current,
+  previous,
+  points,
+  platform = "facebook",
+}: EngagementRateCardProps) {
+  const currentRate = calculateEngagementRate(current, platform);
+  const previousRate = calculateEngagementRate(previous, platform);
   const growth = calculateGrowth(currentRate, previousRate);
   const TrendIcon = TREND_ICON[growth.trend];
 
-  const sparklineData = points.map((p) => ({ value: calculateEngagementRate(p) }));
+  const sparklineData = points.map((p) => ({ value: calculateEngagementRate(p, platform) }));
 
   return (
     <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}>

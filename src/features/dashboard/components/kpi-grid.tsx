@@ -5,6 +5,7 @@ import { KpiCard } from "@/features/dashboard/components/kpi-card";
 import { EngagementRateCard } from "@/features/dashboard/components/engagement-rate-card";
 import { SUPPORTED_KPI_METRICS, type KpiMetric } from "@/config/kpi";
 import { calculateMetricSetGrowth } from "@/features/dashboard/utils/growth";
+import type { EngagementPlatform } from "@/features/dashboard/utils/engagement";
 import type { MetricSet, WeeklyMetricPoint } from "@/features/dashboard/types/dashboard.model";
 
 interface KpiGridProps {
@@ -16,6 +17,8 @@ interface KpiGridProps {
   readonly metrics?: readonly KpiMetric[];
   /** Appends a derived Engagement Rate card at the end of the grid. */
   readonly showEngagementRate?: boolean;
+  /** Platform for Engagement Rate's denominator (Reach for Facebook, Impressions for LinkedIn). */
+  readonly platform?: EngagementPlatform;
 }
 
 /** Priority order per Dashboard_Engine.md KPI PRIORITY — reach/impressions/followers first. */
@@ -37,6 +40,7 @@ export function KpiGrid({
   onSelectMetric,
   metrics,
   showEngagementRate = false,
+  platform = "facebook",
 }: KpiGridProps) {
   const growthByMetric = calculateMetricSetGrowth(current, previous);
   const displayOrder = metrics ? DISPLAY_ORDER.filter((m) => metrics.includes(m)) : DISPLAY_ORDER;
@@ -69,7 +73,12 @@ export function KpiGrid({
             ease: [0.16, 1, 0.3, 1],
           }}
         >
-          <EngagementRateCard current={current} previous={previous} points={points} />
+          <EngagementRateCard
+            current={current}
+            previous={previous}
+            points={points}
+            platform={platform}
+          />
         </motion.div>
       )}
     </div>
