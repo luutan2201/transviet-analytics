@@ -124,6 +124,7 @@ export function DashboardContent() {
         points={periodMetrics.points}
         onSelectMetric={setSelectedMetric}
         metrics={FACEBOOK_METRICS}
+        showEngagementRate
       />
       <PerformanceSection points={periodMetrics.points} />
       <MonthlyComparisonSection monthly={data.monthly} metrics={FACEBOOK_METRICS} />

@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { METRIC_LABELS } from "@/features/dashboard/types/dashboard.model";
 import { KPI_STATUS_LABELS } from "@/features/kpi/config/kpi-status-labels";
 import { exportToExcel } from "@/lib/export/excel-export";
+import { calculateEngagementRate } from "@/features/dashboard/utils/engagement";
 import { ROUTES } from "@/config/routes";
 
 interface ExportOptionProps {
@@ -87,6 +88,7 @@ export function ExportContent() {
           Shares: row.shares,
           Clicks: row.clicks,
           "Video Views": row.videoViews,
+          "Engagement Rate (%)": Number(calculateEngagementRate(row).toFixed(2)),
         })),
       },
     ]);

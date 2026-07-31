@@ -86,6 +86,7 @@ export function LinkedInContent() {
         points={periodMetrics.points}
         onSelectMetric={setSelectedMetric}
         metrics={LINKEDIN_METRICS}
+        showEngagementRate
       />
       <MonthlyComparisonSection monthly={data.monthly} metrics={LINKEDIN_METRICS} />
       <ComparisonSection

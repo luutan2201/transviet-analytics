@@ -14,9 +14,10 @@ import { ArrowUpDown, ChevronLeft, ChevronRight, Table as TableIcon, Download } 
 import { TableContainer } from "@/components/shared/data-containers";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
-import { formatFullNumber } from "@/utils/formatters";
+import { formatFullNumber, formatPercent } from "@/utils/formatters";
 import type { WeeklyMetricPoint } from "@/features/dashboard/types/dashboard.model";
 import { exportToExcel } from "@/lib/export/excel-export";
+import { calculateEngagementRate } from "@/features/dashboard/utils/engagement";
 
 const columnHelper = createColumnHelper<WeeklyMetricPoint>();
 
@@ -69,6 +70,11 @@ const columns = [
     header: "Clicks",
     cell: (info) => formatFullNumber(info.getValue()),
   }),
+  columnHelper.display({
+    id: "engagementRate",
+    header: "Engagement Rate",
+    cell: (info) => formatPercent(calculateEngagementRate(info.row.original)),
+  }),
 ];
 
 interface LinkedInDataTableProps {
@@ -104,6 +110,7 @@ export function LinkedInDataTable({ data }: LinkedInDataTableProps) {
           Comments: row.comments,
           Shares: row.shares,
           Clicks: row.clicks,
+          "Engagement Rate (%)": Number(calculateEngagementRate(row).toFixed(2)),
         })),
       },
     ]);

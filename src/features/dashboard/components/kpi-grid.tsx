@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { KpiCard } from "@/features/dashboard/components/kpi-card";
+import { EngagementRateCard } from "@/features/dashboard/components/engagement-rate-card";
 import { SUPPORTED_KPI_METRICS, type KpiMetric } from "@/config/kpi";
 import { calculateMetricSetGrowth } from "@/features/dashboard/utils/growth";
 import type { MetricSet, WeeklyMetricPoint } from "@/features/dashboard/types/dashboard.model";
@@ -13,6 +14,8 @@ interface KpiGridProps {
   readonly onSelectMetric?: (metric: (typeof SUPPORTED_KPI_METRICS)[number]) => void;
   /** Restricts which metric cards render — defaults to all 8. Used to hide metrics a platform doesn't track. */
   readonly metrics?: readonly KpiMetric[];
+  /** Appends a derived Engagement Rate card at the end of the grid. */
+  readonly showEngagementRate?: boolean;
 }
 
 /** Priority order per Dashboard_Engine.md KPI PRIORITY — reach/impressions/followers first. */
@@ -27,7 +30,14 @@ const DISPLAY_ORDER = [
   "videoViews",
 ] as const;
 
-export function KpiGrid({ current, previous, points, onSelectMetric, metrics }: KpiGridProps) {
+export function KpiGrid({
+  current,
+  previous,
+  points,
+  onSelectMetric,
+  metrics,
+  showEngagementRate = false,
+}: KpiGridProps) {
   const growthByMetric = calculateMetricSetGrowth(current, previous);
   const displayOrder = metrics ? DISPLAY_ORDER.filter((m) => metrics.includes(m)) : DISPLAY_ORDER;
 
@@ -48,6 +58,20 @@ export function KpiGrid({ current, previous, points, onSelectMetric, metrics }: 
           />
         </motion.div>
       ))}
+
+      {showEngagementRate && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.4,
+            delay: displayOrder.length * 0.05,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          <EngagementRateCard current={current} previous={previous} points={points} />
+        </motion.div>
+      )}
     </div>
   );
 }
